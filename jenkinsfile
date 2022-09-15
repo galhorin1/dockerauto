@@ -9,7 +9,7 @@ pipeline {
       stage('check if image exist and install if not') {
          steps {
             echo 'check if image exist and install if not'  
-		 sh''' if [ $(docker images | grep alpcondocker | wc -l) -eq 0 ]; then
+		 sh''' if [ $(docker images | grep alpcon | wc -l) -eq 0 ]; then
                 	docker build -t alpcon:1.0 ${WORKSPACE}
                 fi
 		  '''

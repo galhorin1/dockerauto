@@ -1,6 +1,7 @@
 #!/bin/python3
 import time
 
+time.sleep(30)
 file=open('/home/app/datapy','a')
 file.write("hello from python script\n")
 file.close()

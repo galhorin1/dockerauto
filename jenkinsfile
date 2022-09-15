@@ -9,8 +9,8 @@ pipeline {
       stage('check if image exist and install if not') {
          steps {
             echo 'check if image exist and install if not'  
-		 sh''' if [ $(docker images | grep AlpCon | wc -l) -eq 0 ]; then
-                docker build -t AlpCon:1.0 .
+		 sh''' if [ $(docker images | grep alpcon | wc -l) -eq 0 ]; then
+                docker build -t alpcon:1.0 .
                 fi
 		  '''
          }
@@ -18,12 +18,11 @@ pipeline {
        stage('run the file') {
          steps {
             echo 'running file'  
-		 sh'''if [ $(docker ps | grep AlpCon | wc -l) -eq 0 ]; then
-                if [ $(docker ps -a | grep AlpCon | wc -l) -eq 0 ]; then
-                    docker start -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
-                else
-                    docker run -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
+		 sh'''if [ $(docker ps | grep alpcon | wc -l) -eq 0 ]; then
+                if [ $(docker ps -a | grep alpcon | wc -l) -eq 0 ]; then
+                    docker run -v ${WORKSPACE}:/home/app/ --name alpcon alpcon:1.0
                 fi
+		docker start alpcon
               fi
 		  '''
          }
@@ -33,7 +32,7 @@ pipeline {
          steps {
             echo 'stopping checking exit code'  
 		 sh'''docker stop alpcon
-              if [ $(docker ps -a | grep AlpCon | grep "Exited (0)" | wc -l ) -eq 0 ]; then
+              if [ $(docker ps -a | grep alpcon | grep "Exited (0)" | wc -l ) -eq 0 ]; then
                 "filed to execute file" >> logfile
               fi
 		  '''

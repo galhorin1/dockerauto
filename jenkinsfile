@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent: dockerslave
    stages {
       stage('Clone Sources') {
         steps {
@@ -9,8 +9,8 @@ pipeline {
       stage('check if image exist and install if not') {
          steps {
             echo 'check if image exist and install if not'  
-		 sh''' if [ $(docker images | grep alpcon | wc -l) -eq 0 ]; then
-                docker build -t alpcon:1.0 .
+		 sh''' if [ $(docker images | grep alpcondocker | wc -l) -eq 0 ]; then
+                	docker build -t alpcon:1.0 .
                 fi
 		  '''
          }

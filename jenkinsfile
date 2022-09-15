@@ -13,23 +13,7 @@ pipeline {
                 	docker build -t alpcon:1.0 ${WORKSPACE}
                 fi
 		  '''
-            echo 'running file'  
-		 sh'''if [ $(docker ps | grep alpcon | wc -l) -eq 0 ]; then
-                if [ $(docker ps -a | grep alpcon | wc -l) -eq 0 ]; then
-                    docker run -v ${WORKSPACE}:/home/app/ --name alpcon alpcon:1.0
-                fi
-		docker start alpcon
-              fi
-		  '''
-            echo 'stopping checking exit code'  
-		 sh'''docker stop alpcon
-              if [ $(docker ps -a | grep alpcon | grep "Exited (0)" | wc -l ) -eq 0 ]; then
-                "filed to execute file" >> logfile
-              fi
-		  '''
          }
-      }
-      
-      
+	}
    }
 }

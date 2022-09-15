@@ -2,7 +2,7 @@
 import time
 
 file=open('/home/app/logfile','w+')
-file.write("hello from python script")
+file.write("hello from python script\n")
 file.close()
 
 print("hello from python")

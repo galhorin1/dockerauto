@@ -35,7 +35,7 @@ pipeline {
 		 if [ $(docker ps | grep alpcon | wc -l) -eq 1 ];then
 		 	docker kill alpcon
 		fi
-		if[ $(docker ps -a | grep alpcon| grep "Exited (0)"  | wc -l) -eq 0 ];then
+		if [ $(docker ps -a | grep alpcon| grep "Exited (0)"  | wc -l) -eq 0 ];then
                 	echo "failed to run script error" $(docker ps -a | grep alpcon ) >> logfile
 		else 
 			echo "succeeded "  $(docker ps -a | grep alpcon ) >> logfile

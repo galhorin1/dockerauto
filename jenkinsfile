@@ -1,15 +1,45 @@
-if [ $(docker images | grep AlpCon | wc -l) -eq 0 ]; then
-    docker build -t AlpCon:1.0 .
-fi
-if [ $(docker ps | grep AlpCon | wc -l) -eq 0 ]; then
-    if [ $(docker ps -a | grep AlpCon | wc -l) -eq 0 ]; then
-        docker start -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
-    else
-        docker run -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
-    fi
-fi
-sleep(10)
-if [ $(docker ps | grep AlpCon | wc -l) -eq 1 ]; then
-    docker stop AlpCon
-    add to log file failure+datetime
-fi
+pipeline {
+  agent dockerslave
+   stages {
+      stage('Clone Sources') {
+        steps {
+          checkout scm
+        } 
+      }
+      stage('check if image exist and install if not') {
+         steps {
+            echo 'check if image exist and install if not'  
+		 sh''' if [ $(docker images | grep AlpCon | wc -l) -eq 0 ]; then
+                docker build -t AlpCon:1.0 .
+                fi
+		  '''
+         }
+      }
+       stage('run the file') {
+         steps {
+            echo 'running file'  
+		 sh'''if [ $(docker ps | grep AlpCon | wc -l) -eq 0 ]; then
+                if [ $(docker ps -a | grep AlpCon | wc -l) -eq 0 ]; then
+                    docker start -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
+                else
+                    docker run -d -v /home/gal/dockerapp/:/home/app/ --name AlpCon AlpCon:1.0
+                fi
+              fi
+		  '''
+         }
+      }
+      
+       stage('stop and check exit code') {
+         steps {
+            echo 'stopping checking exit code'  
+		 sh'''docker stop alpcon
+              if [ $(docker ps -a | grep AlpCon | grep "Exited (0)" | wc -l ) -eq 0 ]; then
+                "filed to execute file" >> logfile
+              fi
+		  '''
+         }
+      }
+      
+      
+   }
+}

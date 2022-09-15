@@ -1,4 +1,8 @@
 #!/bin/python3
 import time
 
+file=open('/home/app/logfile','w+')
+file.write("hello from python script")
+file.close()
+
 print("hello from python")

@@ -29,7 +29,7 @@ pipeline {
 	}
 	stage('stop the docker and put logs') {
          steps {
-            echo 'check if image exist and install if not'  
+            echo 'stop the docker and put logs'  
 		 sh''' 
 		 docker stop alpcon
 		 if [ $(docker ps -a | grep alpcon |grep "Exited (0)" | wc -l) -eq 0 ]; then

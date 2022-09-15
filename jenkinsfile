@@ -31,12 +31,15 @@ pipeline {
          steps {
             echo 'stop the docker and put logs'  
 		 sh''' 
-		 docker stop alpcon
-		 if [ $(docker ps -a | grep alpcon |grep "Exited (0)" | wc -l) -eq 0 ]; then
+		sleep 10
+		 if [ $(docker ps | grep alpcon | wc -l) -eq 1 ]; then
+		 	docker kill alpcon
+		fi
+		if[ $(docker ps -a | grep alpcon| grep "Exited (0)"  | wc -l) -eq 0 ]; then
                 	echo "failed to run script error" $(docker ps -a | grep alpcon ) >> logfile
-			else 
+		else 
 			echo "succeeded "  $(docker ps -a | grep alpcon ) >> logfile
-                fi
+		fi
 		  '''
          }
 	}

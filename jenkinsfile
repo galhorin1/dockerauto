@@ -1,5 +1,5 @@
 pipeline {
-  agent dockerslave
+  agent { label dockerslave || any }
    stages {
       stage('Clone Sources') {
         steps {
